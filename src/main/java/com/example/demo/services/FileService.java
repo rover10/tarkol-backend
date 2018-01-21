@@ -13,12 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 
+
+
 // Test File exist
 // Belongs to user 
 // File is not too large
 @Service
 public class FileService {
-	private final String path = "C:\\Users\\rakes\\tarkol_data\\"; 
+	private final String path = ""; //"C:\\Users\\rakes\\tarkol_data\\"; 
 	public List<String> getFileContent(String filename) {
 		System.out.println("Inside file reader");
 		System.out.println("File " + path+filename);
@@ -78,4 +80,7 @@ public class FileService {
         
         return emitter;
 	}
+	
+
+	
 }
