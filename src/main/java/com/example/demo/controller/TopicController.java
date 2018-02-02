@@ -18,17 +18,17 @@ public class TopicController {
 	@Autowired
 	TopicService topicService;
 	
-	@RequestMapping(path = "/topics")
+	@RequestMapping(path = "/api/topics")
 	public List<Topic>getAll(){
 		return topicService.getAll();
 	}
 	
-	@RequestMapping(path ="/topics/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path ="/api/topics/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public Topic getTopic(@PathVariable String id) {
 		return topicService.getTopic(id);
 	}
 	
-	@RequestMapping(method=RequestMethod.POST, value="/topics" ,produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method=RequestMethod.POST, value="/api/topics" ,produces=MediaType.APPLICATION_JSON_VALUE)
 	public void saveTopic(@RequestBody Topic topic) {
 		topicService.addTopic(topic);
 	}

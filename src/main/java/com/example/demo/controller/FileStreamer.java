@@ -20,7 +20,7 @@ public class FileStreamer {
 	@Autowired
 	FileService fileReader;
 	
-	 @RequestMapping("/sseTest")
+	 @RequestMapping("/api/sseTest")
 	    public ResponseBodyEmitter handleRequest () {
 		 	System.out.println("Request initiated!");
 	        final SseEmitter emitter = new SseEmitter();
@@ -44,7 +44,7 @@ public class FileStreamer {
 	        return emitter;
 	    }
 
-	 @RequestMapping("/stream/file/")
+	 @RequestMapping("/api/stream/file/")
 	    public ResponseBodyEmitter streamFile (@ModelAttribute FileInfo fileInfo) {
 		 	System.out.println("Streaming request initiated!");
 		 	System.out.println("File : " + fileInfo.getFileName());

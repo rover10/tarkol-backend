@@ -1,20 +1,29 @@
 package com.example.demo.services.storage;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.services.glacier.model.ListJobsResult;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -34,18 +43,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.AbortMultipartUploadRequest;
 import com.amazonaws.services.s3.model.CompleteMultipartUploadRequest;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.InitiateMultipartUploadRequest;
 import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PartETag;
 import com.amazonaws.services.s3.model.UploadPartRequest;
 
+@Service
 public class StorageService {
 
     public void init() {};
@@ -223,5 +238,106 @@ public class StorageService {
 			
 	        return false;
 	}
+	
+	public List<String> getFileList(String bucket, String user){
+		
+		//
+		String AWSAccessKeyId = "AKIAJE5O35UQ5TEY2RTA";
+		String AWSSecretKey = "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";
+		AWSCredentials credentials = new BasicAWSCredentials(
+    			AWSAccessKeyId, 
+    			AWSSecretKey);
+    	
+    	//AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider());
+    	AmazonS3 s3client = new AmazonS3Client(credentials);
+		
+		//
+		
+		//AmazonS3 s3client = new AmazonS3Client(new ProfileCredentialsProvider());        
+		List<String> files = new ArrayList();
+		
+		ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+		.withBucketName(bucketName);
+		//.withPrefix("myprefix");
+		ObjectListing objectListing;
+
+		do {
+		    objectListing = s3client.listObjects(listObjectsRequest);
+		    for (S3ObjectSummary objectSummary : 
+		        objectListing.getObjectSummaries()) {
+		        // write to file with e.g. a bufferedWriter
+		        files.add(objectSummary.getKey());
+		    }
+		    listObjectsRequest.setMarker(objectListing.getNextMarker());
+		} while (objectListing.isTruncated());
+		return files;
+	}
+	
+	public void readFromAWSS3(String file) {
+		System.out.println("File to read " + file);
+		AmazonS3  s3 = new AmazonS3Client(new BasicAWSCredentials(AWSAccessKeyId, AWSSecretKey));
+		S3Object s3object = s3.getObject(new GetObjectRequest(
+	            bucketName, file));
+	    System.out.println(s3object.getObjectMetadata().getContentType());
+	    System.out.println(s3object.getObjectMetadata().getContentLength());
+
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(s3object.getObjectContent()));
+	    String line;
+	    try {
+			while((line = reader.readLine()) != null) {
+			  // can copy the content locally as well
+			  // using a buffered writer
+			  System.out.println(line);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public SseEmitter streamerAwsS3File(String file){
+		final SseEmitter emitter = new SseEmitter();
+		ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(() -> {
+           try{
+
+        	System.out.println("File to read " + file);
+       		AmazonS3  s3 = new AmazonS3Client(new BasicAWSCredentials(AWSAccessKeyId, AWSSecretKey));
+       		S3Object s3object = s3.getObject(new GetObjectRequest(
+       	            bucketName, file));
+       	    System.out.println(s3object.getObjectMetadata().getContentType());
+       	    System.out.println(s3object.getObjectMetadata().getContentLength());
+
+       	    BufferedReader reader = new BufferedReader(new InputStreamReader(s3object.getObjectContent()));
+       	    String line;
+    		    
+    		    emitter.send("\r\n" + 
+    		    		"retry:1000000\n");
+    		  while ((line = reader.readLine()) != null){
+    		     emitter.send(line , MediaType.TEXT_PLAIN);
+    		        		     
+    		    }
+    		    reader.close();
+    		    System.out.println("Closing the connection");
+    		    emitter.send("\r\n" + 
+    		    		"event:close\n");
+    		  }
+    		  catch (Exception e){
+    		    System.err.format("Exception occurred trying to read '%s'.", file);
+    		    System.out.println("Closing the connection");
+    		    e.printStackTrace();
+    		    try {
+					emitter.send("\r\n" + 
+							"event:close\n");
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+    		  }
+    		emitter.complete();
+        });
+        
+        return emitter;
+	}
+
 
 }

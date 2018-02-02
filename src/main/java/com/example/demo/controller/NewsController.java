@@ -19,7 +19,7 @@ public class NewsController {
 	NewsService newsService;
 	
 	
-	@RequestMapping(path = "/news")
+	@RequestMapping(path = "/api/news")
 	public List<News>getAll(){
 		try {
 			newsService.collectNews("https://hacker-news.firebaseio.com/v0/item/8863.json");
@@ -30,7 +30,7 @@ public class NewsController {
 		return newsService.getAll();
 	}
 	
-	@RequestMapping(path ="/news/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(path ="/api/news/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
 	public News getTopic(@PathVariable String id) {
 		return newsService.getNews(Integer.parseInt(id));
 	}

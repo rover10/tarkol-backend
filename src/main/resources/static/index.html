@@ -1,46 +1,78 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>www.tarkol.com</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" />
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
-  <base href="/">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="tarkol.png" sizes="32x32">
-  <style>
-
-    body{
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>www.tarkol.com</title><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"/><link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet"><link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet"><base href="/"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="tarkol.png" sizes="32x32"><style>body{
         font-family: 'Open Sans', sans-serif !important;
         font-size: 16px !important;
         
     }
+    .tab-content {
+        overflow-y: auto;
+        position: relative;
+        display: inherit;
+    }
 
-   
-    </style>
+    .tab-content > .active {
+        display: flex;
+        overflow: auto;
+        height: 100%;
+        width: 100%;
+    }
+
+.date{
+    border-style: solid;
+    border-width:thin;
+    border-color: silver;
+    background: #00000091;
+    border-radius: 5px;
+    padding: 2px;
+    color: white;
+    text-shadow: 0px 0px 2px white;
+    padding-left: 8px;
+    padding-right: 8px;
+    }
+    .axis {
+    font: 10px sans-serif;
+  }
   
-</head>
-<body id='container'>
-    <top-bar></top-bar>
-    <div style="display:flex; flex-flow:row ; height:100%;background: #f5f5f5;">
-        <div style="display:flex;height:100%;position:static;flex-flow:row">
-            <left-menu-bar></left-menu-bar>
-            <app-root></app-root>
-            
-        </div>
-        
-    </div>
-   
-       
- 
- 
-    <console-tab></console-tab>
-
-    <terminal></terminal>     
-
-<script type="text/javascript" src="inline.bundle.js"></script><script type="text/javascript" src="polyfills.bundle.js"></script><script type="text/javascript" src="styles.bundle.js"></script><script type="text/javascript" src="vendor.bundle.js"></script><script type="text/javascript" src="main.bundle.js"></script></body>
-</html>
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+  
+  .axis-title {
+    fill: none;
+    stroke: black;
+    stroke-width: 0.5px;
+  }
+  
+  
+  .axis--x path {
+    /*display: none;*/
+  }
+  
+  .line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+  }</style><link href="styles.c4ffaf38d93792dde3c0.bundle.css" rel="stylesheet"/></head><body id="container"><top-bar></top-bar><div style="flex-flow:row ; height:100%;background: #f5f5f5"><div style="display:flex;height:100%;position:relative;flex-flow:row"><left-menu-bar></left-menu-bar><app-root style="width:100%"></app-root><div style="background: #fafafa;
+            overflow-y:auto;
+            position: relative;
+            width: 100%;
+            font-size:12.5px;
+            display: initial;
+            text-shadow: 0px 0px 0.1px #232222;
+            color: #000000;
+            padding-left: 10px;
+            box-shadow: 0px 0px 7px #c1c1c1 inset"><div style="MARGIN-LEFT: 10PX;
+                MARGIN-TOP: 20PX;
+                MARGIN-BOTTOM: 20PX"><h6>STOCK PRICE <span class="date">XYZ Inc </span>&nbsp; from <span class="date">2010-01-01</span> to <span class="date">2012-05-01</span></h6></div><div style="position: relative;
+                width: 95%;
+                height: 400px;
+                background: #ffffff;
+                box-shadow: 0px 0px 15px 0px #d5d5d5;
+                margin: 10px;
+                padding-right: 20px;
+                border-color: #007bff73;
+                border-style: solid;
+                border-width: thin;
+                border-radius: 5px"><graph-chart></graph-chart></div></div></div></div><span style="background:silver;display:flex;position:relative;flex-flow:row"></span><console-tab></console-tab><terminal></terminal><script type="text/javascript" src="inline.c4decc4a0ad73ada5d43.bundle.js"></script><script type="text/javascript" src="polyfills.b8858ddd6c4bd49f3fdf.bundle.js"></script><script type="text/javascript" src="vendor.15653820f9702cfdc143.bundle.js"></script><script type="text/javascript" src="main.f161dc7b9b938e9d88c9.bundle.js"></script></body></html>

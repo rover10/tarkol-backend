@@ -20,7 +20,7 @@ public class FileUploadController {
 	
 
 	
-	@GetMapping("/files/{filename:.+}")
+	@GetMapping("/api/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
@@ -43,7 +43,7 @@ public class FileUploadController {
     }
 	*/
 	
-	@RequestMapping(value = "/files", method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@RequestMapping(value = "/api/files", method = RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String uploadFile(@RequestPart MultipartFile file){
 	    System.out.println("Request received " + file.getOriginalFilename());
 		//storageService.store(file);

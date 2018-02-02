@@ -18,7 +18,7 @@ public class HelloController {
 	@Autowired
 	private TopicService topicService;
 	
-	@RequestMapping("/hello")
+	@RequestMapping("/api//hello")
 	public String sayHello(){
 		return "Hello";
 	}
@@ -28,7 +28,7 @@ public class HelloController {
 		return "Uploaded!";
 	}
 	
-	@RequestMapping("/all")
+	@RequestMapping("/api/all")
 	public List<Topic>allTopics(){
 		return topicService.getAll	(); 
 	}
