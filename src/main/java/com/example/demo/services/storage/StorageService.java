@@ -242,8 +242,8 @@ public class StorageService {
 	public List<String> getFileList(String bucket, String user){
 		
 		//
-		String AWSAccessKeyId = "AKIAJE5O35UQ5TEY2RTA";
-		String AWSSecretKey = "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";
+		String AWSAccessKeyId = "";
+		String AWSSecretKey = "";
 		AWSCredentials credentials = new BasicAWSCredentials(
     			AWSAccessKeyId, 
     			AWSSecretKey);
