@@ -95,8 +95,8 @@ public class StorageService {
 
 
 	private static String bucketName     = "tarkol.com.uploads"; //"*** Provide bucket name ***";
-	private static String AWSAccessKeyId = "";
-	private static String AWSSecretKey = "";
+	private static String AWSAccessKeyId = "AKIAJE5O35UQ5TEY2RTA";
+	private static String AWSSecretKey = "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";
 	
 	//private static String uploadFileName = ""; //"*** Provide file name ***";
 	
